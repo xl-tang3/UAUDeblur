@@ -5,6 +5,9 @@ The repository contains reproducible `PyTorch` source code for computing the est
 
 <p align="center"><img src="pics/Model.png" width="700" /></p>
 
+## visualization of the kernel induced error (residual)
+<p align="center"><img src="pics/res.png" width="500" /></p>
+
 ## Test on real blurry images from Lai dataset
 <p align="center"><img src="pics/real.png" width="400" /></p>
 
