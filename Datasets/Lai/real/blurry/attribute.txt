@@ -1,0 +1,100 @@
+bird            natural         
+boat1           manmade         
+boat2           manmade         
+book1           text            
+book2           text            
+book3           text            
+book4           text            
+boy_statue      manmade         
+bridge          manmade         saturated       
+building1       manmade         
+building2       manmade         saturated       
+butchershop     manmade         
+cairo1979       natural         people          
+car_house       manmade         
+car1            manmade         
+car2            manmade         saturated       
+car3            manmade         saturated       
+car4            manmade         saturated       
+car5            manmade         saturated       
+church          manmade         
+coke            manmade         
+cross_stitch    manmade         
+dinner          manmade         people          saturated       
+dog             manmade         people          
+elephant        manmade         
+face            people          saturated       
+face2           people          
+family          manmade         people          saturated       
+ferry           manmade         saturated       
+fishes          natural         
+flower          natural         
+fountain1       manmade         
+garden          natural         saturated       
+girls           manmade         people          
+hanzi           manmade         text            
+harubang        manmade         
+house1          manmade         
+house2          manmade         
+house3          manmade         
+house4          manmade         
+ian1            natural         
+istanbul        manmade         saturated       
+lady_portrait   manmade         
+leaf            natural         
+lion            natural         
+livingroom      manmade         
+lobster         manmade         
+lyndsey         manmade         
+mukta           people          
+night1          manmade         saturated       
+night2          manmade         saturated       
+night3          manmade         saturated       
+night4          manmade         natural         saturated       
+night5          manmade         saturated       
+night6          manmade         saturated       
+notredame       manmade         saturated       
+nv              manmade         
+outdoor         natural         
+pagode          manmade         saturated       
+Pantheon        manmade         
+petrol_station1 manmade         
+picasso         manmade         people          
+pietro          people          
+postcard        manmade         
+redtree         natural         
+roma            manmade         
+sculpture       manmade         
+shelf           manmade         
+shrink          natural         
+singing         people          
+statue1         manmade         
+statue2         manmade         
+stone           natural         
+street_cars     manmade         saturated       
+street1         manmade         saturated       
+street2         manmade         saturated       
+street3         manmade         saturated       
+street4         manmade         people          saturated       
+subway          manmade         
+summerhouse     manmade         
+sydney_opera    manmade         saturated       
+text1           text            
+text2           text            
+text3           text            
+text4           text            
+text5           text            
+text6           text            
+text7           text            
+text8           text            
+text9           text            
+text10          text            
+text11          text            
+text12          text            
+topresso        manmade         saturated       
+torres          natural         
+toy             manmade         
+vase            manmade         saturated       
+vintage_car     manmade         
+wall            manmade         
+wheel           manmade         
