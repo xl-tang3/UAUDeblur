@@ -3,7 +3,7 @@ This is the official `Python` implementation of the [CVPR 2023](CVPR.thecvf.com)
 
 The repository contains reproducible `PyTorch` source code for computing the estimate the deblurred image and residual given a single kernel and blurry image.
 
-<p align="center"><img src="pics/Model.png" width="400" /></p>
+<p align="center"><img src="pics/Model.png" width="700" /></p>
 <p align="center"><img src="pics/real.png" width="400" /></p>
 <p align="center"><img src="pics/robustness.png" width="400" /></p>
 
