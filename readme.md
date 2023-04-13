@@ -1,7 +1,7 @@
 # Uncertainty-Aware Unsupervised Image Deblurring with Deep Residual Prior
 This is the official `Python` implementation of the [CVPR 2023](https://cvpr.thecvf.com/)  paper **Uncertainty-Aware Unsupervised Image Deblurring with Deep Residual Prior**
 
-The repository contains reproducible `PyTorch` source code for computing the estimate the deblurred image and residual given a single kernel and blurry image.
+The repository contains reproducible `PyTorch` source code for computing the deblurred image and residual given a single kernel and blurry image.
 
 <p align="center"><img src="pics/Model.png" width="700" /></p>
 
