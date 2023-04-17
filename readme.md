@@ -15,7 +15,5 @@ The repository contains reproducible `PyTorch` source code for computing the deb
 <p align="center"><img src="pics/robustness.png" width="400" /></p>
 
 
-Run the m file 'KernelGen_benchmark/Inacu.m' for data prepraration.
-This will transform the kernel input into FFT domain for the sake of computation and save all the inputs in 'mat' files.
 
 If the inputs contain only blurry images, you will need to run some kernel estimation algorithm to obtain the kernel.
