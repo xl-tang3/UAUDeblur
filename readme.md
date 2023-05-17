@@ -3,6 +3,17 @@ This is the official `Python` implementation of the [CVPR 2023](https://cvpr.the
 
 The repository contains reproducible `PyTorch` source code for computing the deblurred image and residual given a single kernel and blurry image.
 
+## Citation
+'''
+@InProceedings{Tang_2023_CVPR,
+    author    = {Tang, Xiaole and Zhao, Xile and Liu, Jun and Wang, Jianli and Miao, Yuchun and Zeng, Tieyong},
+    title     = {Uncertainty-Aware Unsupervised Image Deblurring With Deep Residual Prior},
+    booktitle = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
+    month     = {June},
+    year      = {2023},
+    pages     = {9883-9892}
+}
+'''
 <p align="center"><img src="pics/Model.png" width="700" /></p>
 
 ## Visualization of the kernel induced error (residual)
@@ -17,13 +28,3 @@ The repository contains reproducible `PyTorch` source code for computing the deb
 
 
 If the inputs contain only blurry images, you will need to run some kernel estimation algorithm to obtain the kernel.
-
-## Reference
-@InProceedings{Tang_2023_CVPR,
-    author    = {Tang, Xiaole and Zhao, Xile and Liu, Jun and Wang, Jianli and Miao, Yuchun and Zeng, Tieyong},
-    title     = {Uncertainty-Aware Unsupervised Image Deblurring With Deep Residual Prior},
-    booktitle = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
-    month     = {June},
-    year      = {2023},
-    pages     = {9883-9892}
-}
