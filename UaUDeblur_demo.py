@@ -35,7 +35,6 @@ class DeepResPrior(object):
         self.out_avg = 0
         self.best_result = None
         self.current_result = None
-        self.best_wmse = 100
         self.current_result_av = None
         self.exp_weight = 0.99
         self.best_result_av = None
@@ -57,28 +56,23 @@ class DeepResPrior(object):
         # matlab = transplant.Matlab(jvm=False, desktop=False)
         # [PSF, x, w, h] = matlab.APG3()
         mat = scio.loadmat('K.mat')
-        w_mat = scio.loadmat('w.mat')
-        self.subpoint = 500
-        self.w_true = np_to_torch(w_mat['w']).unsqueeze(0).type(self.dtype)
         self.PSF= torch.real(np_to_torch(mat['PSF'])).unsqueeze(0).type(self.dtype)
         self.img_blurred_torch = np_to_torch(self.img_blurred_np).unsqueeze(0).type(self.dtype)
         self.img_out_np = torch.zeros(1, 1, img_blurred.shape[0], img_blurred.shape[1]).type(self.dtype)
-        # self.res_input = get_noise(self.input_depth, method='2D', spatial_size=(img_blurred.shape[0], img_blurred.shape[1])).type(self.dtype)
+        self.res_input = get_noise(self.input_depth, method='2D', spatial_size=(img_blurred.shape[0], img_blurred.shape[1])).type(self.dtype)
         self.img_input = get_noise(self.input_depth, method='2D',
                                    spatial_size=(img_blurred.shape[0], img_blurred.shape[1])).type(self.dtype)
         # print(self.res_input)
         # scio.savemat('./output/self.res_input.mat',{'input':torch_to_np(self.res_input).squeeze()})
         input_mat = scio.loadmat('./output/self.res_input.mat')
-        self.res_input = np_to_torch(input_mat['input']).unsqueeze(0).type(self.dtype)
+        # self.res_input = np_to_torch(input_mat['input']).unsqueeze(0).type(self.dtype)
         # self.img_input = np_to_torch(input_mat['input']).unsqueeze(0).type(self.dtype)
-        print(self.res_input)
         # Size = [w.shape[0], w.shape[1]]
         self.w = torch.zeros(1, 1, self.res_input.shape[2], self.res_input.shape[3]).type(self.dtype)
-        self.res_input_vec = self.res_input.reshape(-1,1,self.res_input.shape[2]*self.res_input.shape[3]).type(self.dtype)
+        # self.res_input_vec = self.res_input.reshape(-1,1,self.res_input.shape[2]*self.res_input.shape[3]).type(self.dtype)
         self.s = torch.zeros(1, 1, self.res_input.shape[2], self.res_input.shape[3]).type(self.dtype)
         self.o = torch.zeros(1, 1, self.res_input.shape[2], self.res_input.shape[3]).type(self.dtype)
-        # w_input = np_to_torch(w).type(dtype)
-        # w_input = w_input.unsqueeze(0)
+
         self.img_outt_torch = np_to_torch(self.imgfblur_np).unsqueeze(0).type(self.dtype)
         self.image_net = skip(self.input_depth, 1,
                     num_channels_down = [8, 16, 32, 64, 128],
@@ -86,16 +80,7 @@ class DeepResPrior(object):
                     num_channels_skip = [4, 4, 4, 4, 4],
                     upsample_mode='bilinear',
                     need_sigmoid=True, need_bias=True, pad=self.pad, act_fun='LeakyReLU').type(self.dtype)
-
- #        self.artifacts_net = skip(self.input_depth, 1,
- #             num_channels_down=[8, 16, 32, 64, 128],
- #             num_channels_up=[8, 16, 32, 64, 128],
- #             num_channels_skip=[4, 4, 4, 4, 4],
- #             upsample_mode='bilinear',
- #             need_sigmoid=True, need_bias=True, pad=self.pad, act_fun='LeakyReLU').type(self.dtype)
- #
-
-
+        
         self.residual_net = skip(self.input_depth, 1,
             num_channels_down = [8, 16, 32, 64, 128],
             num_channels_up   = [8, 16, 32, 64, 128],
@@ -110,8 +95,6 @@ class DeepResPrior(object):
         self.ssim = SSIM().type(self.dtype)
         self.l1 = torch.nn.L1Loss().type(self.dtype)
         self.tv = TVLoss().type(self.dtype)
-        # parameters = [p for p in self.image_net.parameters()] + [p for p in self.residual_net.parameters()]
-        # self.parameters = parameters
 
         if self.load_pretrain :
             print('-------pretrain model loaded--------')
@@ -119,8 +102,10 @@ class DeepResPrior(object):
 
         else:
             print('--------pretrain model unloaded--------')
+            
         self.p1 = self.image_net.parameters()
         self.p2 = self.residual_net.parameters()
+        
     def sub(self):
        #  tmp = self.s - dct_2d(idct_2d(self.s) + self.img_blurred_torch - self.img_est_torch - self.w)
         tmp = self.img_blurred_torch - self.img_est_torch - self.w
@@ -135,8 +120,8 @@ class DeepResPrior(object):
             optimizer = torch.optim.Adam([{'params':self.p1},{'params':self.p2,'lr':5e-8}],lr=self.learning_rate) # for the sake of accuracy, with a lower lr. #5e-8
         else:
             optimizer = torch.optim.Adam([{'params': self.p1}, {'params': self.p2, 'lr': 5e-4}], lr=self.learning_rate)
-        #optimizer = torch.optim.Adam(self.p1,lr=self.learning_rate)
         scheduler = MultiStepLR(optimizer, milestones=[2000, 3000], gamma=0.5)
+        
         # Optimization
         for i in range(self.num_iter + 1):
             optimizer.zero_grad()
@@ -150,7 +135,6 @@ class DeepResPrior(object):
     def closure(self, step):
 
         if step > 2:
-            self.x_temp = self.img_out_torch.detach()
         self.img_out_torch = self.image_net(self.img_input)
         self.w = self.residual_net(self.res_input)
         self.img_est_torch = torch.real(torch.fft.irfft2(torch.fft.rfft2(self.img_out_torch) * self.PSF))
@@ -164,17 +148,12 @@ class DeepResPrior(object):
         self.total_loss =    self.mse(self.img_est_torch + self.s + self.w,
                                    self.img_blurred_torch)  + self.Lambda1* self.sploss(dct_2d(self.s))  + self.Lambda2* self.sploss(self.w)+0.05*self.tv(self.img_out_torch)
 
-        # self.total_loss = self.mse(self.img_blurred_torch ,self.im g_est_torch)
         self.total_loss.backward()
 
         self.img_out_temp = self.img_out_torch.detach()
         self.img_out_np = torch_to_np(self.img_out_torch).squeeze()
         self.out_avg = self.out_avg * self.exp_weight + self.img_out_np * (1 - self.exp_weight)
-        # if self.gradterm:
-        #     self.total_loss = self.mse(self.img_blurred - self.blurred_est, self.res_out) + self.lambda3 * self.l1(
-        #         2 * self.res_out, self.res_out) /
-        #                       + self.lambda2 * self.mse(self.res_out, self.grad)
-        # else:
+
 
     def _obtain_current_result(self, step):
         self.psnr = compare_psnr(self.img_clean_np, self.img_out_np)
