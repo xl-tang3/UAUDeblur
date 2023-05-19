@@ -25,6 +25,7 @@ The repository contains reproducible `PyTorch` source code for computing the deb
 ## Robustness to the kernel error
 <p align="center"><img src="pics/robustness.png" width="400" /></p>
 
+If the inputs contain only blurry images, you will need to run some outsourcing kernel estimation algorithm to obtain the kernel. The datasets folder include some estimated kernel and corresponding blurry images for test.
 
+If you have any problem, contact me at Sherlock315@163.com
 
-If the inputs contain only blurry images, you will need to run some kernel estimation algorithm to obtain the kernel.
