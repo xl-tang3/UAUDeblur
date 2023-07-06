@@ -134,10 +134,9 @@ class DeepResPrior(object):
 
     def closure(self, step):
 
-        if step > 2:
         self.img_out_torch = self.image_net(self.img_input)
         self.w = self.residual_net(self.res_input)
-        self.img_est_torch = torch.real(torch.fft.irfft2(torch.fft.rfft2(self.img_out_torch) * self.PSF))
+        self.img_est_torch = torch.real(torch.fft.irfft2(torch.fft.fft2(self.img_out_torch) * self.PSF))
 
         #
         if step > 0:
