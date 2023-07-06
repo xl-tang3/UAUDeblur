@@ -156,9 +156,8 @@ class DeepResPrior(object):
 
     def _obtain_current_result(self, step):
         self.psnr = compare_psnr(self.img_clean_np, self.img_out_np)
-        self.wmse = torch_to_np(self.mse(self.w_true,self.w))
         self.PSNR.append(self.psnr)
-        self.MSE.append(self.wmse)
+
 
         if self.load_pretrain:
             scio.savemat('PSNRTrain.mat',{'trained':self.PSNR})
@@ -177,8 +176,6 @@ class DeepResPrior(object):
             scio.savemat('./output/img_out.mat', {'x': self.img_out_np})
             scio.savemat('./output/img_out_av.mat',{'xav':self.out_avg})
             torch.save(self.image_net.state_dict(),'./output/img_net_paras.pth')
-        if self.wmse < self.best_wmse:
-            self.best_wmse = self.wmse
             torch.save(self.residual_net.state_dict(), './output/res_net_paras12.pth')
         if self.best_result_av is None or self.best_result_av.psnr < self.current_result_av.psnr:
             self.best_result_av = self.current_result_av
