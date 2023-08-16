@@ -25,7 +25,7 @@ Here are the [Paper](https://openaccess.thecvf.com/content/CVPR2023/papers/Tang_
 ## Robustness to the kernel error
 <p align="center"><img src="pics/robustness.png" width="400" /></p>
 
-If the inputs contain only blurry images, you will need to run some outsourcing kernel estimation algorithm to obtain the kernel. The datasets folder include some estimated kernel and corresponding blurry images for test.
+If the inputs contain only blurry images, you will need to run some outsourcing kernel estimation algorithm to obtain the kernel. The dataset folder includes some estimated kernel and corresponding blurry images for test.
 
 Before runing `UDeblur_demo.py`, the first thing you have to do is to pre-process the (estimated) kernel with Fourier transformation and save it as a `.mat` file. We provide an example for this procdure, see `KernelGen_Inaccu.m`; where the FFT of blur kernel is done via the function `extendHforConv.m`.
 
