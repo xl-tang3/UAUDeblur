@@ -54,22 +54,26 @@ class DeepResPrior(object):
         self.img_clean_np = img_clean/255.0
         # matlab = transplant.Matlab(jvm=False, desktop=False)
         # [PSF, x, w, h] = matlab.APG3()
-        mat = scio.loadmat('K.mat')
+        mat = scio.loadmat('K1.mat')
         self.subpoint = 500
+        w_mat = scio.loadmat('w1.mat')
+
         self.PSF= torch.real(np_to_torch(mat['PSF'])).unsqueeze(0).type(self.dtype)
         self.img_blurred_torch = np_to_torch(self.img_blurred_np).unsqueeze(0).type(self.dtype)
         self.img_out_np = torch.zeros(1, 1, img_blurred.shape[0], img_blurred.shape[1]).type(self.dtype)
-        # self.res_input = get_noise(self.input_depth, method='2D', spatial_size=(img_blurred.shape[0], img_blurred.shape[1])).type(self.dtype)
+        self.res_input = get_noise(self.input_depth, method='2D', spatial_size=(img_blurred.shape[0], img_blurred.shape[1])).type(self.dtype)
         self.img_input = get_noise(self.input_depth, method='2D',
                                    spatial_size=(img_blurred.shape[0], img_blurred.shape[1])).type(self.dtype)
         # print(self.res_input)
         # scio.savemat('./output/self.res_input.mat',{'input':torch_to_np(self.res_input).squeeze()})
-        input_mat = scio.loadmat('./output/self.res_input.mat')
-        self.res_input = np_to_torch(input_mat['input']).unsqueeze(0).type(self.dtype)
+        # input_mat = scio.loadmat('./output/self.res_input.mat')
+
+        # self.res_input = np_to_torch(input_mat['input']).unsqueeze(0).type(self.dtype)
         # self.img_input = np_to_torch(input_mat['input']).unsqueeze(0).type(self.dtype)
         print(self.res_input)
         # Size = [w.shape[0], w.shape[1]]
         self.w = torch.zeros(1, 1, self.res_input.shape[2], self.res_input.shape[3]).type(self.dtype)
+        self.r = np_to_torch(w_mat['w']).unsqueeze(0).type(self.dtype)
         self.res_input_vec = self.res_input.reshape(-1,1,self.res_input.shape[2]*self.res_input.shape[3]).type(self.dtype)
         self.s = torch.zeros(1, 1, self.res_input.shape[2], self.res_input.shape[3]).type(self.dtype)
         self.o = torch.zeros(1, 1, self.res_input.shape[2], self.res_input.shape[3]).type(self.dtype)
@@ -118,8 +122,7 @@ class DeepResPrior(object):
         self.p1 = self.image_net.parameters()
         self.p2 = self.residual_net.parameters()
     def sub(self):
-       #  tmp = self.s - dct_2d(idct_2d(self.s) + self.img_blurred_torch - self.img_est_torch - self.w))
-        tmp = self.img_blurred_torch - self.img_est_torch - self.w
+        tmp = self.img_blurred_torch - self.img_est_torch - self.r
         self.s = torch.max(self.o, tmp - self.Lambda1) + torch.min(self.o,tmp + self.Lambda1)
 
     def optimize(self):
@@ -157,10 +160,11 @@ class DeepResPrior(object):
 
         self.img_est_np = torch_to_np(self.img_est_torch).squeeze()
 
-        self.total_loss =    self.mse(self.img_est_torch + self.s + self.w,
+
+        self.total_loss =   self.mse(self.img_est_torch + self.s + self.w,
                                    self.img_blurred_torch)  + self.Lambda1* self.sploss(dct_2d(self.s))  + self.Lambda2* self.sploss(self.w)+0.05*self.tv(self.img_out_torch)
 
-        # self.total_loss = self.mse(self.img_blurred_torch ,self.im g_est_torch)
+
         self.total_loss.backward()
 
         self.img_out_temp = self.img_out_torch.detach()
@@ -220,8 +224,7 @@ class DeepResPrior(object):
 # cv2.imwrite('w_out.png', img_out_np*255)
 
 if __name__ == "__main__":
-    blurry_filename = "cameraman_blurry.png"
-    clean_filename = "cameraman.png"
-    blurry_tr_filename = 'cameraman_tr_bluury.png'
-    DRP = DeepResPrior(blurry_filename, clean_filename, num_iter = 3050, load_pretrain = 1)
+    blurry_filename = "blurry.png"
+    clean_filename = "clean.png"
+    DRP = DeepResPrior(blurry_filename, clean_filename, num_iter = 4050, load_pretrain = 0)
     DRP.optimize()
