@@ -18,7 +18,8 @@ K2 = @(x) ifft2(fft2(x).*fPSFext);
 y1 = K2(x);                         
 w_true = y - y1;
 imshow(abs(w_true),[])
-imwrite(y,'cameraman_blurry.png')
+imwrite(y,'blurry.png')
+imwrite(x,'clean.png')
 PSF = fPSFext;
 w = w_true;
 save('K.mat','PSF')
