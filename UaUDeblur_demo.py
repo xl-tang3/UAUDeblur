@@ -122,7 +122,7 @@ class DeepResPrior(object):
         self.p1 = self.image_net.parameters()
         self.p2 = self.residual_net.parameters()
     def sub(self):
-        tmp = self.img_blurred_torch - self.img_est_torch - self.r
+        tmp = self.img_blurred_torch - self.img_est_torch - self.w
         self.s = torch.max(self.o, tmp - self.Lambda1) + torch.min(self.o,tmp + self.Lambda1)
 
     def optimize(self):
