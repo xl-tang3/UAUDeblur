@@ -162,7 +162,7 @@ class DeepResPrior(object):
 
 
         self.total_loss =   self.mse(self.img_est_torch + self.s + self.w,
-                                   self.img_blurred_torch)  + self.Lambda1* self.sploss(dct_2d(self.s))  + self.Lambda2* self.sploss(self.w)+0.05*self.tv(self.img_out_torch)
+                                   self.img_blurred_torch)  + self.Lambda1* self.sploss(dct_2d(self.s))  + self.Lambda2* self.sploss(self.w)+2*self.tv(self.img_out_torch)
 
 
         self.total_loss.backward()
