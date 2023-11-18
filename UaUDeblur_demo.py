@@ -7,11 +7,10 @@ from net.noise import *
 from utils.image_io import *
 from utils.common_utils import *
 from DCT import *
-from skimage.metrics import peak_signal_noise_ratio as compare_psnr
-from skimage.metrics import structural_similarity as ssim
 from SSIM import SSIM
 from util import *
-
+from skimage.metrics import peak_signal_noise_ratio as compare_psnr
+from skimage.metrics import structural_similarity as ssim
 import matplotlib.pyplot as plt
 Result = namedtuple("Result", ['recon', 'psnr'])
 
