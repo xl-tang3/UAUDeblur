@@ -2,7 +2,6 @@ import numpy as np
 import torch
 import torch.nn as nn
 
-
 def dct1(x):
     """
     Discrete Cosine Transform, Type I

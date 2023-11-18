@@ -80,13 +80,15 @@ def compare_mse(im1, im2):
     im1, im2 = _as_floats(im1, im2)
     return np.mean(np.square(im1 - im2), dtype=np.float64)
 
-def compare_psnr(im_true, im_test, data_range=None):
-
+def compare_psnr(im_true, im_test, shave_border=12):
+    height, width = im_true.shape[:2]
+    im_gt = im_true[shave_border:height - shave_border, shave_border:width - shave_border]
+    im_pred = im_test[shave_border:height - shave_border, shave_border:width - shave_border]
     psnr = 0
-    k = im_true.shape[1]
-    for jj in range(k):
-        psnr = psnr + 10 * np.log10((1 ** 2) / compare_mse(im_true[ :, jj], im_test[ :, jj]))
-
+    assert im_gt.shape == im_pred.shape
+    k = im_gt.shape[1]
+    for jj in range(k+2*shave_border):
+        psnr = psnr + 10 * np.log10((1**2) / compare_mse(im_true[:, jj], im_test[:, jj]))
     return psnr / k
 
 def ssim_index(img1, img2, K=(0.01, 0.03), window=np.multiply(cv2.getGaussianKernel(11, 1.5), (cv2.getGaussianKernel(11, 1.5)).T), L=255):
