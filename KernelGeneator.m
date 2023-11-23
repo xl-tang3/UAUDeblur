@@ -7,7 +7,7 @@ x = double(imread('.\datasets\sharp\im_4.png'))/255;
 imwrite(x(:,:,1),'clean.png')
 SIZE = size(x(:,:,1));
 % k = double(imread('.\datasets\Levin\BD_cho_and_lee_tog_2009\k_8_im_4_cho_and_lee.png'));
-k = double(imread('.\datasets\ker_levin\BD_sun_iccp_2013\kernel_estimates\k_8_im_4_sun_2013.png'));
+k = double(imread('.\datasets\BD_sun_iccp_2013\kernel_estimates\k_8_im_4_sun_2013.png'));
 inacu = k/sum(k(:));
 PSFext = extendHforConv(inacu,SIZE(1),SIZE(2));
 fPSFext = fft2(PSFext);
